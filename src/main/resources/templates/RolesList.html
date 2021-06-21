@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+	<meta charset="UTF-8">
+	<title>My Library - List of Roles</title>
+	<link rel="stylesheet" type="text/css" href="defaultTheme.css" />
+	<link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />	
+	<script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+    
+    <script type="text/javascript" src="/js/header.js"></script>
+</head>
+<body>
+	<div class="container text-left" sec:authorize="isAuthenticated()">
+		<img th:src="@{/images/mybookshelf.png}" />Welcome <b><span
+			sec:authentication="name">user_name!</span></b><span sec:authentication="principal.authorities">Roles</span>
+		<div class="container-fluid">
+			<ul class="nav">
+				<li class="active"><a th:href="@{/Welcome}">Home</a></li>
+				<li><a th:href="@{/Books}">Books</a></li>
+				<li sec:authorize="hasAnyAuthority('ADMIN')"> <a th:href="@{/listUsers}">Users</a></li>
+				<li><a th:href="@{/logout}"> <b>Sign Out</b></a></li>
+			</ul>
+		</div>
+	</div>
+	<div align="center">
+		<h1>Roles List</h1>
+		<span  sec:authorize="hasAnyAuthority('ADMIN')"><a href="/addRoles">Add Role</a><br /></span>
+		<br />
+ 		<table class="table table-striped table-bordered">
+			<thead class="thead-dark">
+				<tr>
+					<th>Role Code</th>
+					<th>Role Name</th>
+					<th>Enabled</th>
+					<th>Default</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+ 			<tbody>
+				<tr th:if="${rolesList.empty}">
+					<td colspan="4">No Roles Available</td>
+				</tr>
+				<tr th:each="role : ${rolesList}">
+					<td th:text="${role.roleCode}">Role Code</td>
+					<td th:text="${role.roleName}">Role Name</td>
+					<td th:text="${role.enabled}" >Enabled</td>
+					<td th:text="${role.defaultEntry}" >Enabled</td>
+					<td ><span  sec:authorize="hasAnyAuthority('ADMIN')" th:if="${role.defaultEntry} == false"> <!--    -->
+					<a th:href="@{'/editRole/' + ${role.roleId}}">Edit</a>
+						&nbsp;&nbsp;&nbsp;
+					<a th:href="@{'/deleteRole/' + ${role.roleId}}">Delete</a>
+					</span></td>
+				</tr>
+			</tbody> 
+		</table> 
+	</div>
+</html>

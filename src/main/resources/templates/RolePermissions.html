@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+	<meta charset="UTF-8">
+	<title>My Library - List of Users</title>
+	<link rel="stylesheet" type="text/css" href="defaultTheme.css" />
+	<link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />	
+	<script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+    
+    <script type="text/javascript" src="/js/header.js"></script>
+</head>
+<body>
+	<div class="container text-left" sec:authorize="isAuthenticated()">
+		<img th:src="@{/images/mybookshelf.png}" />Welcome <b><span
+			sec:authentication="name">user_name!</span></b><span sec:authentication="principal.authorities">Roles</span>
+		<div class="container-fluid">
+			<ul class="nav">
+				<li class="active"><a th:href="@{/Welcome}">Home</a></li>
+				<li><a th:href="@{/Books}">Books</a></li>
+					<li sec:authorize="hasAnyAuthority('ADMIN', 'MEMBER')"> <a th:href="@{/listUsers}">Users</a></li>
+				<li><a th:href="@{/logout}"> <b>Sign Out</b></a></li>
+			</ul>
+		</div>
+	</div>
+	<div align="center">
+		<h1>Permission List</h1>
+		<a href="/addRole">Add Permission</a><br />
+		<br />
+ 		<table class="table table-striped table-bordered">
+			<thead class="thead-dark">
+				<tr>
+					<th>Permission Code</th>
+					<th>Permission Name</th>
+					<th>Enabled</th>
+					<th>Actions</th>
+					<th>Role Code</th>
+					<th>Role Name</th>
+					<th>Enabled</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+
+ 			<tbody>
+				<tr th:if="${rolePermissionsList.empty}">
+					<td colspan="4">No Roles Available</td>
+				</tr>
+				<tr th:each="role : ${rolesList}">
+					<td th:text="${role.roleCode}">Role Code</td>
+					<td th:text="${role.roleName}">Role Name</td>
+					<td th:text="${role.enabled}" >Enabled</td>
+					<tr th:each="permission : ${permissionsList}">
+						<td th:text="${permission.permissionCode}">Permission Code</td>
+						<td th:text="${permission.permissionName}">Permission Name</td>
+						<td th:text="${permission.enabled}" >Enabled</td>
+						<td ><a th:if="${permission.isDefault} == 0" th:href="@{'/editPermission/' + ${permission.permissionId}}">Edit</a>
+							&nbsp;&nbsp;&nbsp; <a th:if="${permission.isDefault} == 0" th:href="@{'/deletePermission/' + ${permission.permissionId}}">Delete</a></td>
+					</tr>
+			</tbody> 
+		</table> 
+	</div>
+</html>

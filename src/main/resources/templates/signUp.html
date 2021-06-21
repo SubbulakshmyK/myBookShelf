@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Sign Up - My BookShelf</title>
+	<link rel="stylesheet" type="text/css" href="defaultTheme.css" />
+	<link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />	
+	
+	<script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+    
+    <script type="text/javascript" src="/js/header.js"></script>
+</head>
+<body>
+	<div class="container text-left">
+	<img th:src="@{/images/mybookshelf.png}" />
+		<span sec:authorize="isAuthenticated()"> Welcome 
+			<b><span sec:authentication="name">userName!</span></b>
+			<span sec:authentication="principal.authorities">Roles</span>
+		</span>
+		<div class="container-fluid">
+			<ul class="nav">
+				<li class="active"><a th:href="@{/Welcome}">Home</a></li>
+				<li><a th:href="@{/Books}">Books</a></li>
+					<li sec:authorize="hasAnyAuthority('ADMIN', 'MEMBER')"> <a th:href="@{/listUsers}">Users</a></li>
+				<li><a th:href="@{/logout}"> <b>Sign Out</b></a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="container-fluid" sec:authorize="!isAuthenticated()">
+		<ul class="nav">
+			<li><a th:href="@{/}">Login</a></li>
+		</ul>
+	</div>
+	<div class="container text-left"><h1 align="center">User Registration - Sign Up</h1></div>
+        <form th:action="@{/saveUserDefRole}" th:object="${user}" method="post" style="max-width: 600px; margin: 0 auto;">
+        	<input type="hidden" th:field="${mode}"/>
+	       <div class="container text-center">
+		        <div class="m-3">
+		        	<div class="form-group row">
+		                <label class="col-5 col-form-label">Full Name: </label>
+						<div class="col-0"><input type="text" th:field="*{fullName}" required minlength="2" maxlength="20" />
+						</div>
+					</div>
+		            <div class="form-group row">
+		                <label class="col-5 col-form-label">User Name:</label>
+		                <div class="col-0">
+							<input type="text" th:field="*{userName}" required minlength="5" maxlength="10" /></div>
+					</div>
+					<div class="form-group row">
+		                <label class="col-5 col-form-label">Password:</label>
+						<div class="col-0"><input type="password" th:field="*{password}" required minlength="6" maxlength="10" /></div>
+					</div>
+					<div class="form-group row">
+		                <label class="col-5 col-form-label">E-mail: </label>
+						<div class="col-0"><input type="email" th:field="*{email}" required /></div>
+					</div>
+					<div class="form-group row">
+		                <label class="col-5 col-form-label">Mobile Number: </label>
+						<div class="col-0"><input type="text" th:field="*{mobileNo}" required minlength="10" maxlength="10" />
+						</div>
+					</div>		
+					<div class="form-group row">
+		                <label class="col-5 col-form-label">Alternate Mobile Number: </label>
+						<div class="col-0"><input type="text" th:field="*{altMobileNo}" minlength="10" maxlength="10" />
+						</div>
+					</div>
+					<div class="col-0">
+						<button type="submit" class="btn btn-primary">Sign Up</button>	
+					</div>
+				</div>
+			</div>
+		</form>
+	</body>
+</html>

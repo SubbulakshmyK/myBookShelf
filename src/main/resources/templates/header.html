@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="ISO-8859-1">
+	<link rel="stylesheet" type="text/css" href="defaultTheme.css" />
+	<link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />	
+	<script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+    
+    <script type="text/javascript" src="/js/header.js"></script>
+</head>
+<body>
+<div th:fragment="header">
+	<div class="container text-left" sec:authorize="isAuthenticated()">
+		<img th:src="@{/images/mybookshelf.png}" />Welcome <b><span
+			sec:authentication="name">user_name!</span></b>
+		<div class="container-fluid">
+			<ul class="nav">
+				<li class="active"><a th:href="@{/Welcome}">Home</a></li>
+				<li><a th:href="@{/Books}">Books</a></li>
+					<li sec:authorize="hasAnyAuthority('ADMIN', 'MEMBER')"> <a th:href="@{/listUsers}">Users</a></li>
+				<li><a th:href="@{/logout}"> <b>Sign Out</b></a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+</body>
+</html>

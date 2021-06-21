@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="ISO-8859-1">
+  <title>MyBookShelf Welcome</title>
+	<link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="defaultTheme.css" />
+		
+	<script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  	
+  	<script type="text/javascript" src="/js/header.js"></script>
+</head>
+<body>
+    <div class="container text-left" sec:authorize="isAuthenticated()">
+    	<img th:src="@{/images/mybookshelf.png}" />Welcome <b><span sec:authentication="name">Name !</span></b>
+    	<span sec:authentication="principal.authorities">Roles</span>
+	  <div class="container-fluid">
+	    <ul class="nav">
+	      <li class="active"><a th:href="@{/Welcome}">Home</a></li>
+	      <li><a th:href="@{/Books}">Books</a></li>
+	      <li sec:authorize="hasAnyAuthority('ADMIN', 'MEMBER')">
+	     	 	<a th:href="@{/listUsers}">Users</a>
+	     	</li>
+		  <li><a th:href="@{/logout}"> <b>Sign Out</b></a></li>
+	    </ul>
+	  </div>
+		
+		<form action="get">
+			<a th:href="@{/listBooks}">Click here to list all books</a><br>
+			<div sec:authorize="hasAnyAuthority('ADMIN', 'MEMBER')">
+				<a th:href="@{/addBooks}">Click here to add books</a><br>
+				<a th:href="@{/listUsers}">Click here to list all Users</a><br>
+				<a th:href="@{/addUser}">Click here to add user</a><br>
+				<a th:href="@{/listRoles}">Click here to List Roles</a><br>
+				<a th:href="@{/listPermissions}">Click here to List Permissions</a><br>
+			</div>
+		</form>
+	</div>
+</body>
+</html>
